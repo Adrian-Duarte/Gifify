@@ -1,39 +1,88 @@
-# Android Technical Interview
-Wolox's base project for the Android's team technical interview
+# Android Technical Challange
+Wolox's base project for the Android's team technical interview for experienced developers.
 
 ### Objective
 
-Build an app that can display a list of Gifs retrieved from the public API of
-[Giphy](https://giphy.com/)
+This technical challenge consists of building a mobile app for the Android platform (obviously) using native code.
 
-The following technical challenges should be addressed during the interview:
+The following concepts will be addressed during this technical challenge:
   - REST API Integration
-  - Recycler's view implementation
+  - UI lists implementation
+  - Android's app architecture
+  - Local data
+  - Kotlin language usage
 
-##### Working Example
+## About _Gifify_
 
-### API Integration.
+Your challenge is to be the sole developer of _Gifify_, the brand new Gif discovery app for [Giphy](https://giphy.com/), a website that holds a collection of Gifs.
+
+With Gifify the end user will be able to discover new Gifs, save them for later use and share them with their contacts, so their friends can see how cool that new cat Gif is.
+
+The app will make us of the public API of [Giphy](https://giphy.com/), we'll discuss that later on a section below.
+
+### Instructions
+
+First of all, clone this project. It already includes a pre-configured Kotlin project with some model classes that may help you.
+
+At Wolox we love independent and problem-solving people, so in general terms you can use whatever you see fit to solve this challenge. We won't hold you back with dependencies restrictions or things like that. If you find a library that you like, you can use it for this project.
+
+Having said that, since this is a technical challenge after all, we expect to see a couple of key points on your code.
+
+* **UI/UX**: You can implement the UI however you prefer. We know that you are a programmer, not a UI/UX designer, so we won't be super demanding on this. However, if you have a good eye for design and can delight us with some eye candy, we'll love to see that.
+* **Architecture**: Business logic on fragments is a bad idea. Please use any architecture you are comfortable with (like MVP or MVVM) to make this app.
+* **Animations**: Give your app some life and animate something. Doesn't matter much what you animate, but make sure to use at least one animation on your project.
+* **Kotlin**: The project must be coded on Kotlin. If you only now Java, basic Kotlin can be learned in one day and it's a great addition for your Android developer career.
+* **Internationalization (i18n)**: The in-app texts can be in either English or Spanish. You don't need to translate the app, but make sure to use that nice `strings.xml` file to store the texts to support translations.
+* **Testing**: Test your business logic. Please test at least one of your Presenters, Controllers or ViewModels (or wherever your business logic resides in) with some unit tests.
+* **Performance**: Make sure your app feels fluid. We won't be too picky with this as long as the UI feels fast.
+* **Code readability**: Always have in mind that your code will be reviewed by developers at Wolox, so code something that we can easily understand. Comments and other forms of documentation are not strictly required, but consider using them if you are unsure whether we will understand why something is implemented the way it is or not.
+
+### Challenge delivery
+
+You'll receive a deadline for this challenge. If something unexpected happens and you think you won't be able to finish the project before the end date, please reach out to us as soon as possible to review your case.
+
+The challenge will be delivered to us by a Github repo. Just make a new repo, work on it and send us the link when you are done so we can check it out (make sure the repo is public or that you give use the proper permissions so we can access it).
+If, for whatever reason, you don't want to work on a Github repo, send us a `.zip` with the code once you have finished.
+
+### Screens
+
+##### Home screen
+This screen will be the entry point to the app. The user should open the app and see a list of random gifs, using Giphy API.
+This view should also have a search bar, where the user can search a term and see a list of the gifs that match that criteria. Please reuse the same list used for the random gifs initially displayed.
+
+If the user clicks on a Gif, a modal/dialog should be displayed allowing the user to share the Gif with his contacts or social networks. Implement this however you like.
+
+Whenever the user long-clicks on a Gif, it should be saved as a favorite.
+
+Gifs that are favorited by the user should be saved on the local storage of the device. Please use the SQLite database to store any necessary data of the favorited Gif so you can display it later. Remember that you can use any library or framework that you prefer, there is no need to write plain SQL when there are libs out there that can help you out.
+
+
+##### Favorites screen
+Similar to the Home screen, but only displays a list of Gifs that were favorited by the user.
+
+Just like in the Home screen, if the user clicks on a Gif, the sharing modal/dialog should be displayed.
+
+If the user long-clicks on a given Gif, a modal/dialog should be displayed asking the users if they wants to remove the Gif from their favorites. If the user decides to remove the Gifs from his favorites it should be removed.
+
+## API Integration.
 
 The full documentation on how to use Giphy's API is here: https://developers.giphy.com/docs/
 Additonally, a summary of the API behaviour can also be found here: https://any-api.com/giphy_com/giphy_com/docs/gifs/searchGifs
 
 #### How to use the API
 
-For this exercise, we will use the `search` endpoint.
-
-##### Endpoint
-The endpoint looks like this:
+As an example, the `search` endpoint looks like this:
 `http://api.giphy.com/v1/gifs/search?q={SEARCH TERM}&api_key={API KEY}`
 
 - `{SEARCH TERM}`: An URL encoded string whith a search term
 - `{API KEY}`: A Giphy provided API token to authenticate the request
 
-We already have an `API KEY` in place for this excersise that you can use for the challenge.
+We already have an `API KEY` in place that you can use for the challenge.
 **API KEY:** `ek7rK0Eh2sbmBGwOFVsFBe93Stt4xQTB`
 
 ##### Response
 
-After successfully implemeting the HTTP request, you will receive a result like this:
+After having successfully implemented the HTTP request, you will receive a response like this:
 
 ```
 {
@@ -188,23 +237,22 @@ Inside the `/models` package you will find the following models:
   - `Images`: An object containing different versions of the `ImageDetails` object
   - `ImageDetails`: This object contains the `URL` for the path to the actual GIF image on Giphy's servers.
 
-#### Suggested workflow
-1) Add a `RecyclerView` to the `MainActivity`
-2) Implement an HTTP request to Giphy's API and return some data
-3) Integrate the Giphy's response to the `RecyclerView` and display the data.
+### Questions
+If you have doubts about this challenge or need further clarification of anything, please reach out to us!
+Asking any question that you have about this project won't hurt your chances of completing the challenge, if anything they can actually improved them.
+
+If you don't have the contact details of the developers that will be reviewing your challenge, ask the HR woloxer that is handling your recruitment process for them.
 
 ### Good luck!
-
-## <a name="topic-about"></a> About
 
 This project is maintained by [Juan Ignacio Molina](https://github.com/juanignaciomolina)
 and it was written by [Wolox](http://www.wolox.com.ar).
 
 ![Wolox](https://raw.githubusercontent.com/Wolox/press-kit/master/logos/logo_banner.png)
 
-## <a name="topic-license"></a> License
+## License
 
-**WOLMO CORE** is available under the MIT [license](https://raw.githubusercontent.com/Wolox/wolmo-core-android/master/LICENSE.md).
+**This code challange** is available under the MIT License.
 
     Copyright (c) Wolox S.A
 
