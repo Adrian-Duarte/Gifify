@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Android Technical Interview</string>
+
+    <string name="general_home">Inicio</string>
+    <string name="general_favorites">Favoritos</string>
 </resources>
