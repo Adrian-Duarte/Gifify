@@ -1,8 +1,13 @@
 package ar.com.wolox.androidtechnicalinterview
 
+import android.app.SearchManager
+import android.content.Context
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import android.os.Handler
 import android.support.design.widget.TabLayout
+import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.SearchView
+import android.view.Menu
 import ar.com.wolox.androidtechnicalinterview.adapters.GifPageAdapter
 import ar.com.wolox.androidtechnicalinterview.fragments.ListGifFragment
 import kotlinx.android.synthetic.main.activity_main.*
@@ -32,6 +37,11 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
+    // Attributes
+    private lateinit var tabsAdapter:  GifPageAdapter
+    private var searchQuery = ""
+    private var handler = Handler()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -39,21 +49,37 @@ class MainActivity : AppCompatActivity() {
         initializeUIElements()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.search_menu, menu)
+        val menuSearchItem = menu?.findItem(R.id.action_search)
+        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        val searchView = menuSearchItem?.actionView as SearchView
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName))
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(s: String): Boolean {
+                return false
+            }
+            override fun onQueryTextChange(nextText: String): Boolean {
+                searchQuery = nextText
+                handler.removeCallbacksAndMessages(null)
+                handler.postDelayed({
+                    if (nextText.isEmpty()) getCurrentFragment().loadData() else getCurrentFragment().loadData(nextText)
+                }, 400)
+                return false
+            }
+        })
+        searchView.maxWidth = Integer.MAX_VALUE
+        return true
+    }
+
     // Private methods
     private fun initializeUIElements() {
-        initializeTabLayout()
+        initializeToolbar()
         initializeViewPager()
+        initializeTabLayout()
     }
 
     private fun initializeTabLayout() {
-        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.general_home)))
-        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.general_favorites)))
-    }
-
-    private fun initializeViewPager() {
-        val tabsAdapter = GifPageAdapter(supportFragmentManager, tabLayout.tabCount)
-        viewPager.adapter = tabsAdapter
-        viewPager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
         tabLayout.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 viewPager.currentItem = tab.position
@@ -61,6 +87,20 @@ class MainActivity : AppCompatActivity() {
             override fun onTabUnselected(tab: TabLayout.Tab) {}
             override fun onTabReselected(tab: TabLayout.Tab) {}
         })
+    }
+
+    private fun initializeToolbar() {
+        setSupportActionBar(toolbar)
+    }
+
+    private fun initializeViewPager() {
+        tabsAdapter = GifPageAdapter(supportFragmentManager, tabLayout.tabCount)
+        viewPager.adapter = tabsAdapter
+        viewPager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
+    }
+
+    private fun getCurrentFragment() : ListGifFragment {
+        return tabsAdapter.getRegisteredFragment(viewPager.currentItem) as ListGifFragment
     }
 
 }

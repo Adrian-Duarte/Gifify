@@ -37,7 +37,23 @@
             android:id="@+id/tabLayout"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            />
+            >
+
+            <android.support.design.widget.TabItem
+                android:id="@+id/tiHome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/general_home"
+                />
+
+            <android.support.design.widget.TabItem
+                android:id="@+id/tiFavorites"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/general_favorites"
+                />
+
+        </android.support.design.widget.TabLayout>
 
     </android.support.design.widget.AppBarLayout>
 

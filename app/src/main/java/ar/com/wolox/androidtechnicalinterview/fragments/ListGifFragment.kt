@@ -59,9 +59,9 @@ class ListGifFragment : Fragment(), ListGifContract.View {
         progressBar = CustomProgressBar(activity!!)
     }
 
-    private fun loadData() {
+    fun loadData(query: String = "random") {
         progressBar.show()
-        presenter.search("random")
+        presenter.search(query)
     }
 
 }
