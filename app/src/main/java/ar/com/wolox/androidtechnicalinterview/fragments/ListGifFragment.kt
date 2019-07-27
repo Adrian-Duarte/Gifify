@@ -1,5 +1,6 @@
 package ar.com.wolox.androidtechnicalinterview.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
@@ -17,7 +18,7 @@ import ar.com.wolox.androidtechnicalinterview.presenters.ListGifPresenter
 import ar.com.wolox.androidtechnicalinterview.utils.CustomProgressBar
 import kotlinx.android.synthetic.main.fragment_list_gif.*
 
-class ListGifFragment : Fragment(), ListGifContract.View {
+class ListGifFragment : Fragment(), ListGifContract.View, GifRecyclerAdapter.OnItemClickListener {
 
     companion object {
         private const val ARGUMENT_TYPE = "argument_type"
@@ -47,10 +48,14 @@ class ListGifFragment : Fragment(), ListGifContract.View {
 
     override fun showGifs(gifs: List<Gif>) {
         val presenter = GifRowPresenter(gifs)
-        val adapter = GifRecyclerAdapter(presenter)
+        val adapter = GifRecyclerAdapter(presenter, this)
         recyclerView.layoutManager = GridLayoutManager(context, 1)
         recyclerView.adapter = adapter
         progressBar.hide()
+    }
+
+    override fun onItemClick(url: String) {
+        share(url)
     }
 
     // Private methods
@@ -59,6 +64,15 @@ class ListGifFragment : Fragment(), ListGifContract.View {
         progressBar = CustomProgressBar(activity!!)
     }
 
+    private fun share(text: String) {
+        val intent = Intent(android.content.Intent.ACTION_SEND)
+        intent.type = "text/plain"
+        intent.putExtra(android.content.Intent.EXTRA_SUBJECT, getString(R.string.share_subject))
+        intent.putExtra(android.content.Intent.EXTRA_TEXT, text)
+        startActivity(Intent.createChooser(intent, getString(R.string.general_share)))
+    }
+
+    // Public methods
     fun loadData(query: String = "random") {
         progressBar.show()
         presenter.search(query)

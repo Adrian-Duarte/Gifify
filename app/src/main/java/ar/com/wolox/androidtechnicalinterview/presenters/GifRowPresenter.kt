@@ -14,4 +14,8 @@ class GifRowPresenter(val gifs: List<Gif>) {
         return gifs.size
     }
 
+    fun getCurrentGif(position: Int) : Gif {
+        return gifs[position]
+    }
+
 }

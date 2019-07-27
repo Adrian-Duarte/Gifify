@@ -8,9 +8,13 @@ import ar.com.wolox.androidtechnicalinterview.R
 import ar.com.wolox.androidtechnicalinterview.presenters.GifRowPresenter
 
 class GifRecyclerAdapter(
-        private val presenter: GifRowPresenter
+        private val presenter: GifRowPresenter,
+        private val listener: OnItemClickListener
 ) : RecyclerView.Adapter<GifRowViewHolder>() {
 
+    interface OnItemClickListener {
+        fun onItemClick(url: String)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GifRowViewHolder {
         return GifRowViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.row_gif, parent, false))
@@ -22,6 +26,9 @@ class GifRecyclerAdapter(
 
     override fun onBindViewHolder(holder: GifRowViewHolder, position: Int) {
         presenter.onBindGifRowViewAtPosition(position, holder)
+        holder.itemView.setOnClickListener({
+            listener.onItemClick(presenter.getCurrentGif(position).url)
+        })
     }
 
 }
