@@ -24,4 +24,4 @@ import ar.com.wolox.android_technical_interview.models.Images
  * DEALINGS IN THE SOFTWARE.
  *
  */
-data class Gif(val id : String, val images : Images)
+data class Gif(val id : String, val images : Images, val title: String)

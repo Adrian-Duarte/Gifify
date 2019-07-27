@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.design.widget.TabLayout
 import ar.com.wolox.androidtechnicalinterview.adapters.GifPageAdapter
+import ar.com.wolox.androidtechnicalinterview.fragments.ListGifFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
 /**
@@ -38,6 +39,7 @@ class MainActivity : AppCompatActivity() {
         initializeUIElements()
     }
 
+    // Private methods
     private fun initializeUIElements() {
         initializeTabLayout()
         initializeViewPager()
@@ -50,7 +52,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun initializeViewPager() {
         val tabsAdapter = GifPageAdapter(supportFragmentManager, tabLayout.tabCount)
-
         viewPager.adapter = tabsAdapter
         viewPager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
         tabLayout.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener {
