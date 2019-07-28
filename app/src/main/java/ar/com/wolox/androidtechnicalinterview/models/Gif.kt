@@ -1,6 +1,8 @@
 package ar.com.wolox.androidtechnicalinterview.models
 
 import ar.com.wolox.android_technical_interview.models.Images
+import com.google.gson.annotations.SerializedName
+import com.orm.dsl.Table
 
 /**
  * MIT License
@@ -24,4 +26,29 @@ import ar.com.wolox.android_technical_interview.models.Images
  * DEALINGS IN THE SOFTWARE.
  *
  */
-data class Gif(val id : String, val images : Images, val title: String, val url: String)
+
+@Table
+class Gif {
+
+    // Attributes
+    @SerializedName("db_id")
+    val id: Long? = null
+
+    @SerializedName("id")
+    lateinit var aid : String
+
+    lateinit var images : Images
+    lateinit var title: String
+    lateinit var url: String
+
+    // Constructors
+    constructor(id: String, images: Images, title: String, url: String) {
+        this.aid = id
+        this.images = images
+        this.title = title
+        this.url = url
+    }
+
+    constructor() {}
+
+}

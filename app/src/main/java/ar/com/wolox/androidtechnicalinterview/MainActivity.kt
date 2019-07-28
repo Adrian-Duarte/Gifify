@@ -3,7 +3,6 @@ package ar.com.wolox.androidtechnicalinterview
 import android.app.SearchManager
 import android.content.Context
 import android.os.Bundle
-import android.os.Handler
 import android.support.design.widget.TabLayout
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.SearchView
@@ -39,8 +38,7 @@ class MainActivity : AppCompatActivity() {
 
     // Attributes
     private lateinit var tabsAdapter:  GifPageAdapter
-    private var searchQuery = ""
-    private var handler = Handler()
+    private lateinit var searchView: SearchView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,18 +51,17 @@ class MainActivity : AppCompatActivity() {
         menuInflater.inflate(R.menu.search_menu, menu)
         val menuSearchItem = menu?.findItem(R.id.action_search)
         val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
-        val searchView = menuSearchItem?.actionView as SearchView
+        searchView = menuSearchItem?.actionView as SearchView
+        searchView.inputType = android.text.InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS or android.text.InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
         searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName))
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(s: String): Boolean {
+                loadData(s)
                 return false
             }
             override fun onQueryTextChange(nextText: String): Boolean {
-                searchQuery = nextText
-                handler.removeCallbacksAndMessages(null)
-                handler.postDelayed({
-                    if (nextText.isEmpty()) getCurrentFragment().loadData() else getCurrentFragment().loadData(nextText)
-                }, 400)
+                if (nextText.isEmpty())
+                    loadData()
                 return false
             }
         })
@@ -83,6 +80,7 @@ class MainActivity : AppCompatActivity() {
         tabLayout.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 viewPager.currentItem = tab.position
+                searchView.onActionViewCollapsed()
             }
             override fun onTabUnselected(tab: TabLayout.Tab) {}
             override fun onTabReselected(tab: TabLayout.Tab) {}
@@ -97,6 +95,10 @@ class MainActivity : AppCompatActivity() {
         tabsAdapter = GifPageAdapter(supportFragmentManager, tabLayout.tabCount)
         viewPager.adapter = tabsAdapter
         viewPager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
+    }
+
+    private fun loadData(query: String? = null) {
+        getCurrentFragment().loadData(query)
     }
 
     private fun getCurrentFragment() : ListGifFragment {

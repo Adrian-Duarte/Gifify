@@ -2,13 +2,20 @@
     <string name="app_name">Android Technical Interview</string>
 
     <!-- General -->
+    <string name="general_added_successfully">Agregado exitosamente</string>
     <string name="general_edit">Editar</string>
+    <string name="general_deleted_successfully">Eliminado exitosamente</string>
     <string name="general_home">Inicio</string>
     <string name="general_favorites">Favoritos</string>
+    <string name="general_no">No</string>
     <string name="general_share">Compartir</string>
     <string name="general_search">Buscar</string>
+    <string name="general_yes">Si</string>
 
     <!-- Share -->
     <string name="share_subject">¿Te gustó? :D</string>
 
+    <!-- Dialog -->
+    <string name="dialog_title">Eliminar favorito</string>
+    <string name="dialog_message">¿Estás seguro de que deseas eliminar el gif de los favoritos?</string>
 </resources>

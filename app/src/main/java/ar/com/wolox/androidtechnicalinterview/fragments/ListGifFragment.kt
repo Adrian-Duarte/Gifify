@@ -3,6 +3,7 @@ package ar.com.wolox.androidtechnicalinterview.fragments
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.GridLayoutManager
 import android.view.LayoutInflater
 import android.view.View
@@ -33,12 +34,26 @@ class ListGifFragment : Fragment(), ListGifContract.View, GifRecyclerAdapter.OnI
     // Attributes
     private lateinit var presenter: ListGifContract.Presenter
     private lateinit var progressBar: CustomProgressBar
+    private var type: GifType? = null
 
     override fun onCreateView(inflater: LayoutInflater, viewGroup: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_list_gif, viewGroup, false)
         initialize()
-        loadData()
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        loadData()
+    }
+
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+        type.run {
+            if (type == GifType.FAVORITES && isVisibleToUser) {
+                loadData()
+            }
+        }
     }
 
     override fun showError(message: String) {
@@ -58,10 +73,34 @@ class ListGifFragment : Fragment(), ListGifContract.View, GifRecyclerAdapter.OnI
         share(url)
     }
 
+    override fun onItemLongClick(gif: Gif) {
+        when(type) {
+            GifType.RANDOM -> {
+                presenter.saveFavorite(gif)
+            }
+            GifType.FAVORITES -> {
+                showConfirmDialog(gif)
+            }
+        }
+    }
+
+    override fun addedSuccessfully() {
+        Toast.makeText(context, getString(R.string.general_added_successfully), Toast.LENGTH_LONG).show()
+    }
+
+    override fun deletedSuccessfully() {
+        Toast.makeText(context, getString(R.string.general_deleted_successfully), Toast.LENGTH_LONG).show()
+        presenter.getFavorites(null)
+    }
+
     // Private methods
     private fun initialize() {
         presenter = ListGifPresenter(this)
         progressBar = CustomProgressBar(activity!!)
+        val args = arguments?.getSerializable(ARGUMENT_TYPE) as GifType
+        args.run {
+            type = args
+        }
     }
 
     private fun share(text: String) {
@@ -72,10 +111,27 @@ class ListGifFragment : Fragment(), ListGifContract.View, GifRecyclerAdapter.OnI
         startActivity(Intent.createChooser(intent, getString(R.string.general_share)))
     }
 
+    private fun showConfirmDialog(gif: Gif) {
+        AlertDialog.Builder(context!!)
+                .setTitle(getString(R.string.dialog_title))
+                .setMessage(getString(R.string.dialog_message))
+                .setPositiveButton(getString(R.string.general_yes), { _, _ -> presenter.deleteFavorite(gif) })
+                .setNegativeButton(getString(R.string.general_no), null)
+                .show()
+    }
+
     // Public methods
-    fun loadData(query: String = "random") {
-        progressBar.show()
-        presenter.search(query)
+
+    fun loadData(query: String? = null) {
+        when(type) {
+            GifType.RANDOM -> {
+                progressBar.show()
+                presenter.search(query ?: "random")
+            }
+            GifType.FAVORITES -> {
+                presenter.getFavorites(query)
+            }
+        }
     }
 
 }

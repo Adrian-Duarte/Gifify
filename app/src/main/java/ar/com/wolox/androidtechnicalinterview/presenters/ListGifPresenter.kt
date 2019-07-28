@@ -2,6 +2,8 @@ package ar.com.wolox.androidtechnicalinterview.presenters
 
 import ar.com.wolox.androidtechnicalinterview.interfaces.APIServices
 import ar.com.wolox.androidtechnicalinterview.interfaces.ListGifContract
+import ar.com.wolox.androidtechnicalinterview.models.Gif
+import com.orm.SugarRecord
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -10,10 +12,10 @@ class ListGifPresenter(
         val view: ListGifContract.View
 ) : ListGifContract.Presenter {
 
-    val apiServices by lazy {
+    private val apiServices by lazy {
         APIServices.create()
     }
-    var disposable: Disposable? = null
+    private var disposable: Disposable? = null
 
     override fun search(query: String) {
         disposable = apiServices
@@ -24,10 +26,27 @@ class ListGifPresenter(
                         { result -> view.showGifs(result.data) },
                         { error ->
                             error.printStackTrace()
-                            view.showError("xxxx")
+                            view.showError(error.localizedMessage)
                         }
                 )
     }
 
+    override fun saveFavorite(gif: Gif) {
+        SugarRecord.save(gif)
+        view.addedSuccessfully()
+    }
+
+    override fun deleteFavorite(gif: Gif) {
+        SugarRecord.delete(gif)
+        view.deletedSuccessfully()
+    }
+
+    override fun getFavorites(query: String?) {
+        if (query==null) {
+            view.showGifs(SugarRecord.listAll(Gif::class.java))
+        } else {
+            view.showGifs(SugarRecord.find(Gif::class.java,"title like ?", "%$query%"))
+        }
+    }
 
 }

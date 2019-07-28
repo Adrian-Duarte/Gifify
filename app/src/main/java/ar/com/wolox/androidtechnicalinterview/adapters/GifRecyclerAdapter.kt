@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import ar.com.wolox.androidtechnicalinterview.GifRowViewHolder
 import ar.com.wolox.androidtechnicalinterview.R
+import ar.com.wolox.androidtechnicalinterview.models.Gif
 import ar.com.wolox.androidtechnicalinterview.presenters.GifRowPresenter
 
 class GifRecyclerAdapter(
@@ -14,6 +15,7 @@ class GifRecyclerAdapter(
 
     interface OnItemClickListener {
         fun onItemClick(url: String)
+        fun onItemLongClick(gif: Gif)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GifRowViewHolder {
@@ -28,6 +30,10 @@ class GifRecyclerAdapter(
         presenter.onBindGifRowViewAtPosition(position, holder)
         holder.itemView.setOnClickListener({
             listener.onItemClick(presenter.getCurrentGif(position).url)
+        })
+        holder.itemView.setOnLongClickListener({
+            listener.onItemLongClick(presenter.getCurrentGif(position))
+            true
         })
     }
 
