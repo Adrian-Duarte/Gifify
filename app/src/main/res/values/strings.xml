@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Android Technical Interview</string>
+    <string name="app_name">Gifify</string>
 
     <!-- General -->
     <string name="general_added_successfully">Agregado exitosamente</string>
