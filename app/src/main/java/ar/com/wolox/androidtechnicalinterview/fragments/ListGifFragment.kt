@@ -64,7 +64,7 @@ class ListGifFragment : Fragment(), ListGifContract.View, GifRecyclerAdapter.OnI
     override fun showGifs(gifs: List<Gif>) {
         val presenter = GifRowPresenter(gifs)
         val adapter = GifRecyclerAdapter(presenter, this)
-        recyclerView.layoutManager = GridLayoutManager(context, 1)
+        recyclerView.layoutManager = GridLayoutManager(context, 2)
         recyclerView.adapter = adapter
         progressBar.hide()
     }

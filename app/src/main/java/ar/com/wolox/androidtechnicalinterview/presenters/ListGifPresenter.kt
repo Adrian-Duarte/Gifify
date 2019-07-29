@@ -23,7 +23,9 @@ class ListGifPresenter(
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        { result -> view.showGifs(result.data) },
+                        { result ->
+                            view.showGifs(result.data)
+                        },
                         { error ->
                             error.printStackTrace()
                             view.showError(error.localizedMessage)
@@ -33,6 +35,8 @@ class ListGifPresenter(
 
     override fun saveFavorite(gif: Gif) {
         SugarRecord.save(gif)
+        SugarRecord.save(gif.images?.fixedHeightSmall)
+        SugarRecord.save(gif.images)
         view.addedSuccessfully()
     }
 
@@ -43,7 +47,7 @@ class ListGifPresenter(
 
     override fun getFavorites(query: String?) {
         if (query==null) {
-            view.showGifs(SugarRecord.listAll(Gif::class.java))
+            view.showGifs(Gif.listAll(true))
         } else {
             view.showGifs(SugarRecord.find(Gif::class.java,"title like ?", "%$query%"))
         }

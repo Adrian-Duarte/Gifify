@@ -8,6 +8,11 @@ class GifRowPresenter(val gifs: List<Gif>) {
     fun onBindGifRowViewAtPosition(position: Int, rowView: GifRowView) {
         val gif = gifs[position]
         rowView.setTitle(gif.title)
+        gif.images?.let {
+            it.fixedHeightSmall?.let {
+                rowView.setImage(it.url)
+            }
+        }
     }
 
     fun getGifsCount() : Int {
