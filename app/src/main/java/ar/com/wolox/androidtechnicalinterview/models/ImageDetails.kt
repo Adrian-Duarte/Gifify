@@ -1,5 +1,8 @@
 package ar.com.wolox.androidtechnicalinterview.models
 
+import com.google.gson.annotations.SerializedName
+import com.orm.dsl.Table
+
 /**
  * MIT License
  *
@@ -22,4 +25,10 @@ package ar.com.wolox.androidtechnicalinterview.models
  * DEALINGS IN THE SOFTWARE.
  *
  */
-data class ImageDetails(val url : String)
+@Table
+class ImageDetails() {
+
+    @SerializedName("url")
+    lateinit var url : String
+
+}

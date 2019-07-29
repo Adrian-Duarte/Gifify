@@ -2,7 +2,9 @@ package ar.com.wolox.androidtechnicalinterview.models
 
 import ar.com.wolox.android_technical_interview.models.Images
 import com.google.gson.annotations.SerializedName
+import com.orm.SugarRecord
 import com.orm.dsl.Table
+
 
 /**
  * MIT License
@@ -28,27 +30,26 @@ import com.orm.dsl.Table
  */
 
 @Table
-class Gif {
+class Gif() {
 
-    // Attributes
+    companion object {
+        fun listAll(withRelationship: Boolean = false) : List<Gif> {
+            val gifs = SugarRecord.listAll(Gif::class.java)
+            if (withRelationship) {
+                gifs.forEach { it.images = SugarRecord.findById(Images::class.java, it.id) }
+            }
+            return gifs
+        }
+    }
+
     @SerializedName("db_id")
     val id: Long? = null
 
     @SerializedName("id")
     lateinit var aid : String
 
-    lateinit var images : Images
+    var images : Images? = null
     lateinit var title: String
     lateinit var url: String
-
-    // Constructors
-    constructor(id: String, images: Images, title: String, url: String) {
-        this.aid = id
-        this.images = images
-        this.title = title
-        this.url = url
-    }
-
-    constructor() {}
 
 }

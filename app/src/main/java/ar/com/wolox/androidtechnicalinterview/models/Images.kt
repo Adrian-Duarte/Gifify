@@ -1,6 +1,8 @@
 package ar.com.wolox.android_technical_interview.models
 
 import ar.com.wolox.androidtechnicalinterview.models.ImageDetails
+import com.google.gson.annotations.SerializedName
+import com.orm.dsl.Table
 
 /**
  * MIT License
@@ -24,7 +26,10 @@ import ar.com.wolox.androidtechnicalinterview.models.ImageDetails
  * DEALINGS IN THE SOFTWARE.
  *
  */
-data class Images(
-    val original : ImageDetails,
-    val downsized : ImageDetails
-)
+@Table
+class Images()  {
+
+    @SerializedName("fixed_height_small")
+    var fixedHeightSmall : ImageDetails? = null
+
+}
