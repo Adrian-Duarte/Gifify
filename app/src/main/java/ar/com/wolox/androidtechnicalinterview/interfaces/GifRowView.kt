@@ -1,4 +1,4 @@
-package ar.com.wolox.androidtechnicalinterview
+package ar.com.wolox.androidtechnicalinterview.interfaces
 
 interface GifRowView {
 
